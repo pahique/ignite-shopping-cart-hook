@@ -33,28 +33,25 @@ const Home = (): JSX.Element => {
   useEffect(() => {
     async function loadProducts() {
       setProducts([]);
-      api.get<Product[]>('/products')
-      .then(response => {
-        console.log(response.data);
-        const formatted = response.data.map(product => ({
-          ...product, 
-          priceFormatted: formatPrice(product.price)
-        }));
-        setProducts(formatted);
-      });
+      const productsResponse = await api.get<Product[]>('/products');
+      const formatted = productsResponse.data.map(product => ({
+        ...product, 
+        priceFormatted: formatPrice(product.price)
+      }));
+      setProducts(formatted);
     }
 
     loadProducts();
   }, []);
 
   function handleAddProduct(id: number) {
-    addProduct(id); //TODO: promise
+    addProduct(id);
   }
 
   return (
     <ProductList>
       {products.map(product => (
-      <li>
+      <li key={product.id}>
       <img src={product.image} alt={product.title} />
       <strong>{product.title}</strong>
       <span>{product.priceFormatted}</span>

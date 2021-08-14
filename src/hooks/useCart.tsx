@@ -57,7 +57,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       const product = cart.find(product => product.id === productId);
       if (!product) {
-        throw "Produto não encontrado";
+        throw new Error("Produto inexistente");
       }
       const modifiedCart = cart.filter(product => product.id !== productId);
       localStorage.setItem('@RocketShoes:cart', JSON.stringify(modifiedCart));
@@ -75,7 +75,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       try {
         const product = cart.find(product => product.id === productId);
         if (!product) {
-          throw "Produto não encontrado";
+          throw new Error("Produto inexistente");
         }
         const stockResponse = await api.get<Stock>(`/stock/${productId}`);
         const stockAmount = stockResponse.data.amount;
