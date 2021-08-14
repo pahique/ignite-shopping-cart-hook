@@ -19,7 +19,6 @@ interface Product {
 
 const Cart = (): JSX.Element => {
   const { cart, removeProduct, updateProductAmount } = useCart();
-  const [total, setTotal] = useState<string>();
   
   const cartFormatted = cart.map(product => ({
      ...product, 
@@ -27,16 +26,11 @@ const Cart = (): JSX.Element => {
      subTotal: formatPrice(product.amount * product.price)
   }));
 
-  useEffect(() => {
-    setTotal(
-      formatPrice(
-        cart.reduce((sumTotal, product) => {
-          sumTotal += product.price * product.amount;
-          return sumTotal;
-        }, 0)
-      )
-    );
-  }, [cart]);
+  const total = formatPrice(
+    cart.reduce((sumTotal, product) => {
+      return sumTotal + product.price * product.amount;
+    }, 0)
+  );
 
   function handleProductIncrement(product: Product) {
     updateProductAmount({productId: product.id, amount: product.amount + 1});
